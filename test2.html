@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SignVN Translate</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    color:#fff;
+    overflow-x:hidden;
+
+    background:
+    radial-gradient(circle at 8% 55%, rgba(255,255,255,.75), transparent 16%),
+    radial-gradient(circle at 22% 52%, rgba(90,110,255,.60), transparent 18%),
+    radial-gradient(circle at 42% 78%, rgba(0,65,255,.38), transparent 20%),
+    radial-gradient(circle at 78% 68%, rgba(0,20,120,.25), transparent 22%),
+    linear-gradient(90deg,#d7d7e8 0%, #0e35d5 46%, #010611 100%);
+}
+
+/* HEADER */
+header{
+    height:78px;
+    background:#10244a;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 55px;
+    position:sticky;
+    top:0;
+    z-index:999;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:700;
+}
+
+nav{
+    display:flex;
+    gap:28px;
+    align-items:center;
+}
+
+nav a{
+    color:#fff;
+    text-decoration:none;
+    font-size:17px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    opacity:.75;
+    position:relative;
+    transition:.25s;
+}
+
+nav a:hover{
+    opacity:1;
+}
+
+nav a.active{
+    opacity:1;
+    font-weight:600;
+}
+
+nav a.active::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-12px;
+    width:100%;
+    height:3px;
+    border-radius:20px;
+    background:#fff;
+}
+
+/* PAGE */
+.page{
+    display:none;
+}
+
+.page.active-page{
+    display:block;
+}
+
+/* MAIN */
+.wrap{
+    width:92%;
+    margin:35px auto;
+    display:grid;
+    grid-template-columns:1.55fr .95fr;
+    gap:25px;
+}
+
+.camera-box{
+    height:430px;
+    border-radius:18px;
+    overflow:hidden;
+    background:#000;
+    border:1px solid rgba(255,255,255,.35);
+}
+
+video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
+}
+
+.left-actions{
+    margin-top:22px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.main-btn{
+    background:#fff;
+    color:#111;
+    padding:18px 40px;
+    border-radius:40px;
+    font-size:18px;
+    min-width:350px;
+}
+
+.small-btn{
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.25);
+    padding:15px 22px;
+    border-radius:16px;
+    font-size:16px;
+}
+
+.status{
+    margin-top:16px;
+    font-size:17px;
+}
+
+.card{
+    background:rgba(10,26,70,.78);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:18px;
+    padding:18px;
+}
+
+.card + .card{
+    margin-top:18px;
+}
+
+.card h2{
+    font-size:24px;
+    margin-bottom:14px;
+}
+
+textarea{
+    width:100%;
+    height:115px;
+    border:none;
+    resize:none;
+    outline:none;
+    border-radius:14px;
+    padding:15px;
+    background:#162e65;
+    color:#fff;
+    font-size:18px;
+}
+
+.tool-row{
+    margin-top:14px;
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+}
+
+select{
+    width:100%;
+    margin-top:14px;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#162e65;
+    color:#fff;
+    font-size:17px;
+}
+
+.history{
+    max-height:280px;
+    overflow:auto;
+}
+
+.item{
+    padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.item small{
+    display:block;
+    margin-top:5px;
+    opacity:.7;
+}
+
+/* HELP PAGE */
+.help-wrap{
+    width:92%;
+    margin:45px auto;
+}
+
+.help-box{
+    background:rgba(10,26,70,.78);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:18px;
+    padding:30px;
+}
+
+.help-box h1{
+    font-size:34px;
+    margin-bottom:20px;
+}
+
+.step{
+    margin-bottom:18px;
+    padding:18px;
+    border-radius:14px;
+    background:rgba(255,255,255,.06);
+}
+
+.step h3{
+    margin-bottom:8px;
+}
+
+.back-btn{
+    margin-top:22px;
+}
+
+@media(max-width:1000px){
+
+.wrap{
+    grid-template-columns:1fr;
+}
+
+nav{
+    display:none;
+}
+
+.main-btn{
+    min-width:100%;
+}
+
+header{
+    padding:0 22px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">SignVN Translate</div>
+
+<nav>
+<a href="#" class="active" onclick="showPage('homePage',this)">
+<i class="fa-solid fa-house"></i> Nhà
+</a>
+
+<a href="#" onclick="uploadVideo()">
+<i class="fa-solid fa-arrow-up-from-bracket"></i> Tải video lên
+</a>
+
+<a href="#" onclick="showPage('homePage',this)">
+<i class="fa-solid fa-circle-info"></i> Giới thiệu
+</a>
+
+<a href="#" onclick="showPage('helpPage',this)">
+<i class="fa-regular fa-circle-question"></i> Hỗ trợ
+</a>
+
+<a href="#"><i class="fa-regular fa-user"></i></a>
+</nav>
+
+<input type="file" id="videoUpload" accept="video/*" hidden>
+
+</header>
+
+<!-- HOME -->
+<div class="page active-page" id="homePage">
+
+<div class="wrap">
+
+<section>
+
+<div class="camera-box">
+<video id="video" autoplay playsinline></video>
+</div>
+
+<div class="left-actions">
+
+<button class="main-btn" id="camBtn" onclick="toggleCam()">
+Bật Cam Dịch Realtime
+</button>
+
+<button class="small-btn" onclick="clearAll()">
+Xóa
+</button>
+
+</div>
+
+<div class="status" id="status">
+Camera Status: Off
+</div>
+
+</section>
+
+<section>
+
+<div class="card">
+
+<h2>Phần Dịch Thuật</h2>
+
+<textarea id="textBox">Xin chào quý vị.</textarea>
+
+<div class="tool-row">
+
+<button class="small-btn" onclick="speakText()">
+<i class="fa-solid fa-volume-high"></i> Loa
+</button>
+
+<button class="small-btn" onclick="copyText()">
+Sao chép
+</button>
+
+<button class="small-btn" onclick="clearText()">
+Xóa
+</button>
+
+</div>
+
+<select>
+<option>Tiếng Việt</option>
+<option>English</option>
+</select>
+
+</div>
+
+<div class="card">
+
+<h2>Lịch sử dịch</h2>
+
+<div class="history" id="history"></div>
+
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+<!-- HELP PAGE -->
+<div class="page" id="helpPage">
+
+<div class="help-wrap">
+
+<div class="help-box">
+
+<h1>Hướng dẫn sử dụng</h1>
+
+<div class="step">
+<h3>1. Bật Camera</h3>
+<p>Nhấn nút "Bật Cam Dịch Realtime" để bắt đầu nhận diện ngôn ngữ ký hiệu.</p>
+</div>
+
+<div class="step">
+<h3>2. Tải Video</h3>
+<p>Chọn mục "Tải video lên" để tải video thủ ngữ từ máy tính.</p>
+</div>
+
+<div class="step">
+<h3>3. Nghe phát âm</h3>
+<p>Nhấn nút Loa để đọc văn bản vừa dịch ra.</p>
+</div>
+
+<div class="step">
+<h3>4. Lịch sử</h3>
+<p>Mọi nội dung mới được nhận diện sẽ tự động lưu vào lịch sử.</p>
+</div>
+
+<button class="small-btn back-btn"
+onclick="showPage('homePage',document.querySelectorAll('nav a')[0])">
+← Quay lại trang chính
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+let stream = null;
+let lastSavedText = "";
+
+/* PAGE SWITCH */
+function showPage(id,el){
+
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active-page");
+});
+
+document.getElementById(id).classList.add("active-page");
+
+document.querySelectorAll("nav a").forEach(a=>{
+a.classList.remove("active");
+});
+
+if(el) el.classList.add("active");
+}
+
+/* CAMERA */
+async function toggleCam(){
+
+const video = document.getElementById("video");
+const btn = document.getElementById("camBtn");
+const status = document.getElementById("status");
+
+if(stream){
+
+stream.getTracks().forEach(track=>track.stop());
+stream = null;
+
+video.srcObject = null;
+
+btn.innerText = "Bật Cam Dịch Realtime";
+status.innerText = "Camera Status: Off";
+
+return;
+}
+
+try{
+
+stream = await navigator.mediaDevices.getUserMedia({
+video:true,
+audio:false
+});
+
+video.srcObject = stream;
+
+btn.innerText = "Tắt Camera";
+status.innerText = "Camera Status: Realtime";
+
+}catch(err){
+alert("Không mở được camera.");
+}
+}
+
+/* UPLOAD */
+function uploadVideo(){
+document.getElementById("videoUpload").click();
+}
+
+document.getElementById("videoUpload")
+.addEventListener("change",function(e){
+
+const file = e.target.files[0];
+if(!file) return;
+
+const video = document.getElementById("video");
+
+if(stream){
+stream.getTracks().forEach(track=>track.stop());
+stream = null;
+}
+
+video.srcObject = null;
+video.src = URL.createObjectURL(file);
+video.controls = true;
+video.play();
+
+document.getElementById("status").innerText =
+"Đang phát video...";
+});
+
+/* SPEAK */
+function speakText(){
+
+const text = document.getElementById("textBox").value.trim();
+
+if(!text) return;
+
+speechSynthesis.cancel();
+
+const voice = new SpeechSynthesisUtterance(text);
+voice.lang = "vi-VN";
+
+speechSynthesis.speak(voice);
+}
+
+/* COPY */
+function copyText(){
+navigator.clipboard.writeText(
+document.getElementById("textBox").value
+);
+}
+
+/* CLEAR */
+function clearText(){
+document.getElementById("textBox").value = "";
+}
+
+function clearAll(){
+
+clearText();
+
+document.getElementById("history").innerHTML = "";
+}
+
+/* HISTORY */
+function addHistory(text){
+
+const time = new Date().toLocaleString("vi-VN");
+
+const div = document.createElement("div");
+
+div.className = "item";
+
+div.innerHTML = `
+<div>${text}</div>
+<small>${time}</small>
+`;
+
+document.getElementById("history").prepend(div);
+}
+
+/* AUTO SAVE HISTORY */
+setInterval(()=>{
+
+const text =
+document.getElementById("textBox").value.trim();
+
+if(text && text !== lastSavedText){
+
+addHistory(text);
+lastSavedText = text;
+
+}
+
+},1500);
+</script>
+
+</body>
+</html>
